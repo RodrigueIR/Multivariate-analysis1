@@ -10,7 +10,7 @@ The diagonal elements of this matrix represent the variances of each variable, w
 ### A scatter plot of bivariate normal distribution
 ![scatterplot](https://github.com/user-attachments/assets/77eb3ea7-e4fa-40c3-b9b1-22845fde801f)
 ### A correlation between the iphone and techno 
-
+![correlation](https://github.com/user-attachments/assets/974878d6-f93f-4abc-8f82-2b82b285747f)
 ### A grid plot for bivariate normal density
 
 ### A countour plot for bivariate normal density
