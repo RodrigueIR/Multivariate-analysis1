@@ -1,0 +1,118 @@
+---
+title: "multivariate analysis"
+author: "Rodrigue"
+date: "2023-11-23"
+output:
+  html_document: default
+---
+
+- Set the mean vector and covariance matrix
+The code defines a 2x2 covariance matrix with values of 2, 0.5, 0.5, and 1 as well as a mean vector with values of 1 and 2. Using the mvrnorm function from the MASS package, it creates 1000 multivariate normal random samples, providing the seed for reproducibility and utilizing a tryCatch block to manage problems.
+
+```{r}
+library(MASS)
+mean_vector <- c(1,2)
+cov_matrix <- matrix(c(2,0.5,0.5,1), nrow = 2)
+random_samples <- mvrnorm(n = 1000, mu = mean_vector, Sigma = cov_matrix)
+colnames(random_samples) <- c('iPhone','Techno')
+head(random_samples)
+mean_vector
+cov_matrix
+```
+- set the generated samples as scatter plot
+The first and second columns of the samples matrix are used by this R code to generate a scatter plot.
+```{r}
+plot(random_samples[,1:2], main = "Scatter Plot of Bivariate Normal Distribution",
+     xlab = "Types of phone", ylab = "Demands/preferences")
+```
+The function generates scatterplot matrices using the R lattice module. While "splom(~random_samples[,1:2])" and "splom(~random_samples[,1:2], pch = 16, col = 'blue')" build scatter plot matrices with distinct plot features, such as point shape and color, the "pairs(random_samples)" function creates a matrix of scatterp lots.
+
+```{r} 
+library(lattice)
+# let generate scatter plot by grouping
+pairs(random_samples)
+splom( ~ random_samples[,1:2])
+```
+- correlation matrix (by curiosity):
+```{r}
+correlation_matrix <- cor(random_samples)
+corrplot::corrplot(correlation_matrix, method = "ellipse")
+```
+- Create a grid for a bivariate normal distribution.
+
+```{r}
+# Let create the grid of values
+x <- seq(-2,4,length.out = 100)
+y <- seq(-2,4,length.out = 100)
+grid <- expand.grid(x = x,y = y)
+grid
+```
+- Calculate the bivariate normal density for each point in the grid.
+```{r}
+library(dplyr)
+library(MASS)
+# The bivariate normal density for each point in the grid
+density_values <- dmvnorm(grid, mean = mean_vector, sigma = cov_matrix)
+rounded_density <- round(density_values, digits = 2)
+# let match the grid dimensions
+density_matrix <- matrix(density_values, nrow = length(x), ncol = length(y), byrow = TRUE)
+# let have a look at the plot
+filled.contour(x, y, density_matrix, main = "Grid for a Bivariate Normal Density",
+               xlab = "sequences x-axes", ylab = "sequences y-axes", color.palette = terrain.colors)
+```
+- Plot the bivariate normal density using a contour plot, labeling the axes appropriately.
+```{r}
+# Plot the bivariate normal density using a contour plot
+contour(x, y, density_matrix, main = "Contour plot of Bivariate Normal Density",
+        xlab = "sequences x-axes", ylab = "sequences y-axes")
+```
+
+Calculate Probabilities:
+- Choose a region of interest (e.g., X < 2 and Y < 3) and calculate the probability.
+- Print the calculated probability.
+
+This R function determines the likelihood of a bivariate normal distribution inside a given region of interest using the mvtnorm package. After defining the mean, covariance matrix, and region boundaries, pmvnorm calculates the probability inside the selected area.
+
+```{r}
+library(mvtnorm)
+lower_limits <- c(-Inf,-Inf)
+upper_limits <- c(2,3)
+# the region of interest
+probability <- pmvnorm(lower = lower_limits, upper = upper_limits,
+                        mean = mean_vector, sigma = cov_matrix)
+# the calculated probability
+cat("Probability in the region of interest:", probability, "\n")
+```
+
+Test for Multivariate Normality:
+- Take a sample of at least 100 observations and two variables.
+
+A synthetic dataset that represents a bivariate normal distribution is produced by this R function. The dataset is created using the mvrnorm function after the seed for reproducibility is established, a sample size of 100 is specified, the mean vector and covariance matrix are defined, and so on. The created distribution's initial few rows are printed at the end.
+
+```{r}
+# let create data vectors 
+set.seed(1234) 
+sample_size <-100  
+# the mean_vector is having the two variables required
+sample_meanvector <- mean_vector                                    
+sample_covariance_matrix <- cov_matrix 
+sample_distribution <- mvrnorm(n = sample_size, 
+                               mu = sample_meanvector,  
+                               Sigma = sample_covariance_matrix) 
+# print top of distribution 
+head(sample_distribution)
+```
+- Test if the dataset follows a multivariate normal distribution.
+- Print and interpret the test results.
+
+The 'MVN' library is used in these R code samples to evaluate multivariate normality using the Henze-Zirkler test ('hz'). The test result applied to the'sample_distribution' is stored in the'result' variable. To gain an understanding of the multivariate normality of the data, the next code would look over and analyze the test results that were acquired.
+
+The p-values acquired from the Henze-Zirkler test are used to interpret the'result'. A low p-value suggests that multivariate normality has been faulty. There is evidence to reject normality if p < 0.05. On the other hand, p > 0.05 indicates that there is no significant variance, hence confirming the multivariate normality assumption in the results.
+
+```{r}
+library(MVN)
+# Test for multivariate normality
+result <- mvn(sample_distribution, mvnTest = "hz")
+# Test result and interpretation
+result
+```
