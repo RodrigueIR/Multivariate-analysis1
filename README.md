@@ -14,3 +14,4 @@ The diagonal elements of this matrix represent the variances of each variable, w
 ### A grid plot for bivariate normal density
 ![grid](https://github.com/user-attachments/assets/fc516084-38d5-4a2c-892f-25601ccc0131)
 ### A countour plot for bivariate normal density
+![countour](https://github.com/user-attachments/assets/971c6ce0-82bd-4b07-a4e9-d2d4c4a4975b)
