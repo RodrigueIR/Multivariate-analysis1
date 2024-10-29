@@ -12,5 +12,5 @@ The diagonal elements of this matrix represent the variances of each variable, w
 ### A correlation between the iphone and techno 
 ![correlation](https://github.com/user-attachments/assets/974878d6-f93f-4abc-8f82-2b82b285747f)
 ### A grid plot for bivariate normal density
-
+![grid](https://github.com/user-attachments/assets/fc516084-38d5-4a2c-892f-25601ccc0131)
 ### A countour plot for bivariate normal density
